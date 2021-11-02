@@ -1,29 +1,27 @@
 package cinema;
 
+import java.util.Scanner;
+
 public class Cinema {
 
-    static char[][] room = {
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'}
-    };
-
     public static void main(String[] args) {
-        printRoom();
-    }
 
-    private static void printRoom() {
-        System.out.println("Cinema:\n  1 2 3 4 5 6 7 8 ");
-        for (int i = 0; i < room.length; i++) {
-            System.out.print(i + 1);
-            for (int j = 0; j < room[i].length; j++) {
-                System.out.print(" " + room[i][j]);
-            }
-            System.out.println();
-        }
+        int rows;
+        int seats;
+        int income;
+        int totalSeats;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter the number of rows:");
+        rows = sc.nextInt();
+        System.out.println("Enter the number of seats in each row:");
+        seats = sc.nextInt();
+
+        totalSeats = rows * seats;
+        income = totalSeats <= 60 ? totalSeats * 10 : ((rows / 2) * seats * 10) + ((rows - (rows / 2)) * seats * 8);
+
+        System.out.println("Total income:");
+        System.out.println("$" + income);
     }
 }
