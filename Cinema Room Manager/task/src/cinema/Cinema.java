@@ -9,9 +9,30 @@ public class Cinema {
 
     public static void main(String[] args) {
         setRoom();
-        printRoom();
-        buySeat();
-        printRoom();
+        showMenu();
+    }
+
+    private static void showMenu() {
+        int item;
+        while (true) {
+            System.out.println(
+                    "1. Show the seats\n" +
+                            "2. Buy a ticket\n" +
+                            "0. Exit"
+            );
+            item = sc.nextInt();
+            System.out.println();
+            switch (item) {
+                case 1:
+                    printRoom();
+                    continue;
+                case 2:
+                    buySeat();
+                    continue;
+                case 0:
+                    return;
+            }
+        }
     }
 
     private static void buySeat() {
@@ -27,7 +48,7 @@ public class Cinema {
         room[row - 1][seat - 1] = 'B';
 
         price = room.length * room[0].length <= 60 ? 10 : room.length / 2 < row ? 8 : 10;
-        System.out.printf("Ticket price: $%d\n", price);
+        System.out.printf("Ticket price: $%d\n\n", price);
     }
 
     private static void printRoom() {
