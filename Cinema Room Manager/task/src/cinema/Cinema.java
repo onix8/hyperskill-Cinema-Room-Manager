@@ -4,8 +4,11 @@ import java.util.Scanner;
 
 public class Cinema {
 
-    static Scanner sc = new Scanner(System.in);
     static char[][] room;
+    static int rows;
+    static int seats;
+
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         setRoom();
@@ -18,8 +21,8 @@ public class Cinema {
             System.out.println(
                     "1. Show the seats\n" +
                             "2. Buy a ticket\n" +
-                            "0. Exit"
-            );
+                            "3. Statistics\n" +
+                            "0. Exit");
             item = sc.nextInt();
             System.out.println();
             switch (item) {
@@ -29,10 +32,45 @@ public class Cinema {
                 case 2:
                     buySeat();
                     continue;
+                case 3:
+                    printStatistics();
+                    continue;
                 case 0:
                     return;
             }
         }
+    }
+
+    private static void printStatistics() {
+        int numberOfPurchasedTickets = 0;
+        double percentageOfPurchasedTickets;
+        int currentIncome = 0;
+        int totalIncome;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < seats; j++) {
+                if ('B' == room[i][j]) {
+                    numberOfPurchasedTickets++;
+                    currentIncome += getPrice(i + 1);
+                }
+            }
+        }
+
+        totalIncome = rows * seats <= 60
+                ? rows * seats * 10
+                : ((rows / 2) * seats * 10) + ((rows - (rows / 2)) * seats * 8);
+
+        percentageOfPurchasedTickets = (double) (numberOfPurchasedTickets * 100) / (room.length * room[0].length);
+
+        System.out.printf(
+                "Number of purchased tickets: %d%n" +
+                        "Percentage: %.2f%%%n" +
+                        "Current income: $%d%n" +
+                        "Total income: $%d%n%n",
+                numberOfPurchasedTickets,
+                percentageOfPurchasedTickets,
+                currentIncome,
+                totalIncome);
     }
 
     private static void buySeat() {
@@ -40,21 +78,33 @@ public class Cinema {
         int seat;
         int price;
 
-        System.out.println("Enter a row number:");
-        row = sc.nextInt();
-        System.out.println("Enter a seat number in that row:");
-        seat = sc.nextInt();
+        while (true) {
+            System.out.println("Enter a row number:");
+            row = sc.nextInt();
+            System.out.println("Enter a seat number in that row:");
+            seat = sc.nextInt();
 
-        room[row - 1][seat - 1] = 'B';
+            try {
+                if (room[row - 1][seat - 1] == 'B') {
+                    System.out.println("That ticket has already been purchased!");
+                } else {
+                    room[row - 1][seat - 1] = 'B';
+                    break;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Wrong input!");
+            }
+        }
 
-        price = room.length * room[0].length <= 60 ? 10 : room.length / 2 < row ? 8 : 10;
+        price = getPrice(row);
         System.out.printf("Ticket price: $%d\n\n", price);
     }
 
-    private static void printRoom() {
-        int rows = room.length;
-        int seats = room[0].length;
+    private static int getPrice(int row) {
+        return rows * seats <= 60 ? 10 : rows / 2 < row ? 8 : 10;
+    }
 
+    private static void printRoom() {
         System.out.print("Cinema:\n ");
         for (int i = 1; i <= seats; i++) {
             System.out.print(" " + i);
@@ -72,9 +122,6 @@ public class Cinema {
     }
 
     private static void setRoom() {
-        int rows;
-        int seats;
-
         System.out.println("Enter the number of rows:");
         rows = sc.nextInt();
         System.out.println("Enter the number of seats in each row:");
